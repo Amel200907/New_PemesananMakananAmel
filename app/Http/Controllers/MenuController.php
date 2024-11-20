@@ -18,12 +18,9 @@ class MenuController extends Controller
     // Show form to create a new menu
     public function create()
     {
-        if (auth()->check() && auth()->user()->role == 'admin') {
-            return view('admin.menu.create');
-        }
-
-        return redirect('/')->with('error', 'You do not have access to this page.');  
+        return view('admin.menu.create'); // Pastikan ada file blade ini
     }
+
     // Store a new menu
     public function store(Request $request)
     {

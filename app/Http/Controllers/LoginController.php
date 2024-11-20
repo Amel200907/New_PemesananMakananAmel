@@ -20,12 +20,13 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
     
-    if (Auth::attempt($credentials)) {
-        return redirect()->intended(route('menu.index')); 
+        if (Auth::attempt($credentials)) {
+            return redirect()->route(auth()->user()->is_admin ? 'admin.dashboard' : 'menu.index');
+        }
+    
+        return back()->withErrors(['email' => 'Email or password is incorrect.']);
     }
-
-    return redirect()->route('login')->withErrors(['email' => 'Invalid credentials']);
-    }
+    
 
     // Logout pengguna
     public function logout()
