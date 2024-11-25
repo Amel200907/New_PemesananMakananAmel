@@ -17,11 +17,15 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $fillable = ['menu_id', 'user_id', 'rating', 'comment'];
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

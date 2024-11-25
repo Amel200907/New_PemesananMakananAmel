@@ -9,22 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('deliveries', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('admin_id')->constrained()->onDelete('cascade');
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['pending', 'on the way', 'delivered'])->default('pending');
-            $table->timestamps();
+        Schema::table('orders', function (Blueprint $table) {
+            $table->string('delivery_status')->default('Dalam Pengiriman');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('deliveries');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('delivery_status');
+        });
     }
 };

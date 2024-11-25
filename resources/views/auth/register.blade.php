@@ -38,7 +38,7 @@
                         <p class="text-gray-500">Fill in the details below to create your account</p>
                     </div>
 
-                    <form method="POST" action="{{ route('register') }}" class="space-y-6">
+                    <form action="{{ route('register') }}" method="POST">
                         @csrf
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>

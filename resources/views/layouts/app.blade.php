@@ -29,6 +29,10 @@
             </ul>
         </div>
     </nav>
+        @if (auth()->check() && auth()->user()->role == 'delivery')
+        <li><a class="nav-link" href="{{ route('delivery.orders') }}">Delivery Orders</a></li>
+        @endif
+
 
     <div class="container mt-4">
         @yield('content')

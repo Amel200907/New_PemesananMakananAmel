@@ -2,38 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Delivery;
-use App\Models\Order;
-use App\Models\Message;
 use Illuminate\Http\Request;
+use App\Models\Delivery;
+
 
 class DeliveryController extends Controller
 {
-    //
+    public function index()
+    {
+        $deliveries = Delivery::all();
+        return view('delivery.index', compact('deliveries'));
+    }
+
+    public function create()
+    {
+        return view('delivery.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'status' => 'required',
+        ]);
+
+        Delivery::create($request->all());
+
+        return redirect()->route('delivery.index')->with('success', 'Delivery created successfully.');
+    }
+
+    public function edit($id)
+    {
+        $delivery = Delivery::findOrFail($id);
+        return view('delivery.edit', compact('delivery'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required',
+        ]);
+
+        $delivery = Delivery::findOrFail($id);
+        $delivery->update($request->all());
+
+        return redirect()->route('delivery.index')->with('success', 'Delivery updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $delivery = Delivery::findOrFail($id);
+        $delivery->delete();
+
+        return redirect()->route('delivery.index')->with('success', 'Delivery deleted successfully.');
+    }
     public function updateStatus(Request $request, $id)
     {
         $order = Order::findOrFail($id);
-        $order->status = $request->status;
+        $order->delivery_status = $request->input('status');
         $order->save();
 
-        return back()->with('success', 'Delivery status updated');
+        return redirect()->route('delivery.orders')->with('success', 'Delivery status updated successfully.');
     }
 
-    public function chat(Request $request, $id)
+    public function orders()
     {
-        $order = Order::findOrFail($id);
-        $message = new Message([
-            'sender' => 'Delivery',
-            'content' => $request->message,
-            'order_id' => $order->id
-        ]);
-        $message->save();
-
-        return back()->with('success', 'Message sent');
-    }
-
-    public function sendMessage($id, Request $request)
-    {
-        // Logic for sending message to user
+        $orders = Order::with('menu', 'user')
+            ->where('status', 'Dalam Pengiriman')
+            ->get();
+        return view('delivery.orders.index', compact('orders'));
     }
 }

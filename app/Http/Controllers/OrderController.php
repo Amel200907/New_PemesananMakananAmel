@@ -11,7 +11,7 @@ class OrderController extends Controller
     //
     public function create(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'menu_id' => 'required|exists:menus,id',
             'quantity' => 'required|integer|min:1',
         ]);
@@ -20,12 +20,11 @@ class OrderController extends Controller
             'user_id' => auth()->id(),
             'menu_id' => $request->menu_id,
             'quantity' => $request->quantity,
-            'status' => 'pending',
+            'status' => 'Pending',
         ]);
 
-        return redirect()->route('order.show', $order->id)->with('success', 'Order created successfully');
+        return redirect()->route('order.history')->with('success', 'Order placed successfully!');
     }
-
     public function show($id)
     {
         $order = Order::with('menu')->findOrFail($id);
@@ -41,7 +40,7 @@ class OrderController extends Controller
     }
     public function history()
     {
-        $orders = Order::where('user_id', auth()->id())->get();
+        $orders = Order::with('menu')->where('user_id', auth()->id())->get();
         return view('order.history', compact('orders'));
     }
     public function updateStatus(Request $request, $id)
@@ -52,4 +51,22 @@ class OrderController extends Controller
 
         return back()->with('success', 'Order status updated');
     }
+    public function checkout(Request $request)
+    {
+        $request->validate([
+            'menu_id' => 'required|exists:menus,id', // validasi id menu
+            'quantity' => 'required|integer|min:1',  // validasi kuantitas
+        ]);
+
+        // Membuat order baru
+        $order = Order::create([
+            'user_id' => auth()->id(),
+            'menu_id' => $request->menu_id,
+            'quantity' => $request->quantity,
+            'status' => 'pending', // status default
+        ]);
+
+        return redirect()->route('order.history')->with('success', 'Order berhasil dibuat!');
+    }
+
 }

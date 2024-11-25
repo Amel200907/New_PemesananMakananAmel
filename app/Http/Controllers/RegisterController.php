@@ -33,4 +33,13 @@ class RegisterController extends Controller
 
         return redirect()->route('login')->with('success', 'Akun berhasil dibuat! Silakan login.');
     }
+    protected function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'] ?? 'Anonymous', // Tambahkan nilai default
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+    }
+
 }

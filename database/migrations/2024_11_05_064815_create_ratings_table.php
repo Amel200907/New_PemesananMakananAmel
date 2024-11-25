@@ -9,13 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('ratings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('menu_id')->constrained()->onDelete('cascade');
-            $table->tinyInteger('rating')->unsigned()->comment('Rating from 1 to 5');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->integer('rating')->default(1);
             $table->text('comment')->nullable();
             $table->timestamps();
         });
@@ -24,7 +24,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('ratings');
     }

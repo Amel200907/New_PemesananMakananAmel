@@ -9,14 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('menu_id')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('delivery_id')->nullable();
-            $table->enum('status', ['pending', 'processed', 'delivered', 'completed'])->default('pending');
+            $table->integer('quantity');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

@@ -46,19 +46,19 @@ class AdminController extends Controller
 
     public function manageOrders()
     {
-        $orders = Order::all();
-        return view('admin.orders', compact('orders'));
+        $orders = Order::with('menu', 'user')->get(); // Include menu and user details
+        return view('admin.orders.index', compact('orders'));
     }
 
-    public function updateOrderStatus($id, Request $request)
+    public function updateOrderStatus(Request $request, $id)
     {
         $order = Order::findOrFail($id);
-        $order->status = $request->status; // Status baru dari request
+        $order->status = $request->input('status');
         $order->save();
 
-        return redirect()->route('admin.orders')->with('success', 'Order status updated.');
+        return redirect()->route('admin.orders')->with('success', 'Order status updated successfully.');
     }
-    public function login(Request $request)
+        public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -68,4 +68,11 @@ class AdminController extends Controller
 
         return back()->with('error', 'Invalid credentials');
     }
+    public function deleteOrder($id)
+{
+    $order = Order::findOrFail($id);
+    $order->delete();
+
+    return redirect()->route('admin.orders')->with('success', 'Order deleted successfully.');
+}
 }
