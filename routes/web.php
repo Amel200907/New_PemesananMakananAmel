@@ -6,6 +6,15 @@ use App\Http\Controllers\{
     DeliveryController, RatingController, DashboardController,
     LoginController, RegisterController
 };
+Route::get('/dashboard', function () {
+    if (auth()->check()) {
+        return auth()->user()->is_admin
+            ? redirect()->route('admin.dashboard')
+            : redirect()->route('menu.index');
+    }
+    return redirect()->route('login');
+})->name('dashboard');
+
 // Public Routes (menu bisa dilihat tanpa login)
 Route::get('/', [MenuController::class, 'index'])->name('menu.index');
 Route::get('/menu/{id}', [MenuController::class, 'show'])->name('menu.show');
@@ -26,6 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/history', [OrderController::class, 'history'])->name('order.history');
 });
 // Admin Routes
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+});
+
 Route::get('/admin/orders', [AdminController::class, 'manageOrders'])->name('admin.orders');
 Route::post('/admin/orders/{id}/status', [AdminController::class, 'updateOrderStatus'])->name('admin.order.updateStatus');
 Route::delete('/admin/orders/{id}', [AdminController::class, 'deleteOrder'])->name('admin.order.delete');

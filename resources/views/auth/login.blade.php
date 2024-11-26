@@ -167,8 +167,8 @@
                         <p class="text-gray-300">Sign in to your exclusive account</p>
                     </div>
 
-                    <form method="POST" action="{{ route('login') }}" class="space-y-6">
-                        @csrf
+                    <form method="POST" action="{{ route('login.post') }}">
+                    @csrf
                         <div class="space-y-4">
                             <div>
                                 <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>

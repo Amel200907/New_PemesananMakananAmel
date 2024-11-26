@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('password123'), // Hash password
-            'is_admin' => true, // Pastikan kolom is_admin ada di tabel users
+            'is_admin' => true, 
         ]);
 
         // Tambahkan akun user biasa
