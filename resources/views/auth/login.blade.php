@@ -193,12 +193,12 @@
                                     class="h-4 w-4 text-yellow-500 border-gray-600 rounded focus:ring-yellow-500 bg-gray-700">
                                 <label for="remember_me" class="ml-2 text-sm text-gray-300">Remember me</label>
                             </div>
-                            @if (Route::has('password.request'))
+                            <!-- @if (Route::has('password.request'))
                                 <a href="{{ route('password.request') }}" 
                                    class="text-sm text-gray-300 hover:text-yellow-400 transition-colors">
                                     Forgot password?
                                 </a>
-                            @endif
+                            @endif -->
                         </div>
 
                         <button type="submit"
@@ -210,7 +210,7 @@
                     @if (Route::has('register'))
                         <p class="text-center mt-8 text-gray-300">
                             New to Santap Aja? 
-                            <a href="{{ route('register') }}" 
+                            <a href="{{ route('register.post') }}" 
                                class="font-medium text-yellow-400 hover:text-yellow-300 transition-colors">
                                 Create Account
                             </a>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rating;
 use App\Models\Menu;
+use App\Models\FavoriteItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,14 +12,18 @@ class MenuController extends Controller
 {
     //
     public function index()
-    {
-        $menus = Menu::all();
-        return view('menu.index', compact('menus'));
-    }
+{
+    $menus = Menu::all();
+
+    $favoriteItems = []; 
+
+    return view('menus.index', compact('menus', 'favoriteItems'));
+}
+
 
     public function create()
     {
-        return view('admin.menu.create');
+        return view('menus.create');
     }
 
     // Store a new menu
@@ -41,12 +46,12 @@ class MenuController extends Controller
             'image' => $imagePath,
         ]);
 
-        return redirect()->route('admin.menu.index')->with('success', 'Menu created successfully!');
+        return redirect()->route('menus.index')->with('success', 'Menu created successfully!');
     } 
     public function edit($id)
     {
         $menu = Menu::findOrFail($id);
-        return view('admin.menu.edit', compact('menu'));
+        return view('menus.edit', compact('menu'));
     }
 
 
@@ -73,19 +78,19 @@ class MenuController extends Controller
 
         $menu->save();
 
-        return redirect()->route('admin.menu.index')->with('success', 'Menu updated successfully!');
+        return redirect()->route('menus.index')->with('success', 'Menu updated successfully!');
     }
     public function destroy($id)
     {
         $menu = Menu::findOrFail($id);
         $menu->delete();
 
-        return redirect()->route('admin.menu.index')->with('success', 'Menu deleted successfully!');
+        return redirect()->route('menus.index')->with('success', 'Menu deleted successfully!');
     }
     public function show($id)
     {
         $menu = Menu::findOrFail($id);
-        return view('menu.show', compact('menu'));
+        return view('menus.show', compact('menu'));
     }
     public function storeRating(Request $request, $menuId)
     {
@@ -101,6 +106,37 @@ class MenuController extends Controller
             'comment' => $request->input('comment'),
         ]);
 
-        return redirect()->route('menu.show', $menuId)->with('success', 'Rating berhasil ditambahkan.');
+        return redirect()->route('menus.show', $menuId)->with('success', 'Rating berhasil ditambahkan.');
+    }
+    public function favorite(Request $request, $menuId)
+    {
+        $userId = auth()->id();
+
+        // Check if item already in favorites
+        $exists = FavoriteItem::where('user_id', $userId)
+            ->where('menu_id', $menuId)
+            ->exists();
+
+        if ($exists) {
+            return redirect()->back()->with('info', 'Item already in favorites.');
+        }
+
+        FavoriteItem::create([
+            'user_id' => $userId,
+            'menu_id' => $menuId,
+        ]);
+
+        return redirect()->back()->with('success', 'Item added to favorites.');
+    }
+
+    public function unfavorite(Request $request, $menuId)
+    {
+        $userId = auth()->id();
+
+        FavoriteItem::where('user_id', $userId)
+            ->where('menu_id', $menuId)
+            ->delete();
+
+        return redirect()->back()->with('success', 'Item removed from favorites.');
     }
 }

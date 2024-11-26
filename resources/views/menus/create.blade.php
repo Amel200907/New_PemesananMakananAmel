@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Create Menu</h1>
-    <form action="{{ route('admin.menu.store') }}" method="POST" enctype="multipart/form-data">
+    <a href="{{ route('menus.create') }}">Create Menu</a>
         @csrf
         <div class="form-group">
             <label for="name">Name</label>

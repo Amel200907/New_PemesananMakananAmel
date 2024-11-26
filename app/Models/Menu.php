@@ -27,5 +27,15 @@ class Menu extends Model
     {
         return $this->ratings()->avg('rating') ?? 0;
     }
+    public function isFavorite()
+    {
+        return $this->favorites()->where('user_id', auth()->id())->exists();
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(FavoriteItem::class);
+    }
+
 
 }

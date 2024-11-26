@@ -3,7 +3,6 @@
 @section('content')
 <div class="container">
     <h1>Menu List</h1>
-    <a href="{{ route('admin.menu.create') }}" class="btn btn-primary">Create Menu</a>
     <table class="table">
         <thead>
             <tr>
@@ -18,12 +17,18 @@
                     <td>{{ $menu->name }}</td>
                     <td>{{ $menu->price }}</td>
                     <td>
-                        <a href="{{ route('admin.menu.edit', $menu->id) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('admin.menu.destroy', $menu->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this menu?')">Delete</button>
-                        </form>
+                        @if (Auth::check() && $menu->isFavorite())
+                            <form action="{{ route('menu.unfavorite', $menu->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Unfavorite</button>
+                            </form>
+                        @else
+                            <form action="{{ route('menu.favorite', $menu->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-primary">Add to Favorites</button>
+                            </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach

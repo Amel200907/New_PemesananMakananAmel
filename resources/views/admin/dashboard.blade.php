@@ -94,43 +94,38 @@
                         </div>
                     </div>
 
-                    <!-- Items Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        @forelse($favoriteItems as $item)
-                        <div class="flex items-center space-x-4 p-4 border rounded-xl">
-                            <img src="{{ $item->image }}" class="w-24 h-24 rounded-xl object-cover" alt="{{ $item->name }}">
-                            <div class="flex-1">
-                                <h3 class="font-medium">{{ $item->name }}</h3>
-                                <div class="flex items-center space-x-2 text-sm text-gray-500">
-                                    <span>{{ $item->total_sales }} Total Sales</span>
-                                    <div class="flex text-yellow-400">
-                                        @for($i = 0; $i < $item->rating; $i++)
-                                            <i class="fas fa-star"></i>
-                                        @endfor
-                                        @for($i = $item->rating; $i < 5; $i++)
-                                            <i class="far fa-star"></i>
-                                        @endfor
-                                    </div>
-                                    <span>({{ $item->reviews_count }} reviews)</span>
-                                </div>
-                            </div>
-                            <div class="w-16 h-16 relative">
-                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                    <circle cx="18" cy="18" r="16" fill="none" 
-                                        class="stroke-current text-gray-200" stroke-width="2"/>
-                                    <circle cx="18" cy="18" r="16" fill="none" 
-                                        class="stroke-current text-pink-500" stroke-width="2"
-                                        stroke-dasharray="{{ $item->percentage * 100 }} 100"
-                                        transform="rotate(-90 18 18)"/>
-                                </svg>
-                                <span class="absolute inset-0 flex items-center justify-center text-sm font-medium">
-                                    {{ $item->percentage }}%
-                                </span>
-                            </div>
+    <!-- Daftar Menu Terfavorit -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @foreach($favoriteItems as $item)
+            <div class="flex items-center space-x-4 p-4 border rounded-xl">
+                <img src="{{ asset('storage/' . $item['image']) }}" class="w-24 h-24 rounded-xl object-cover" alt="{{ $item['name'] }}">
+                <div class="flex-1">
+                    <h3 class="font-medium">{{ $item['name'] }}</h3>
+                    <div class="flex items-center space-x-2 text-sm text-gray-500">
+                        <span>{{ $item['total_sales'] }} Total Sales</span>
+                        <div class="flex text-yellow-400">
+                            @for($i = 0; $i < $item['rating']; $i++)
+                                <i class="fas fa-star"></i>
+                            @endfor
+                            @for($i = $item['rating']; $i < 5; $i++)
+                                <i class="far fa-star"></i>
+                            @endfor
                         </div>
-                        @empty
-                        <p class="text-gray-500">No favorite items available.</p>
-                        @endforelse
+                        <span>({{ $item['reviews_count'] }} reviews)</span>
+                    </div>
+                </div>
+                <div class="w-16 h-16 relative">
+                    <svg class="w-full h-full" viewBox="0 0 36 36">
+                        <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200" stroke-width="2"/>
+                        <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-pink-500" stroke-width="2" stroke-dasharray="{{ $item['percentage'] }} 100" transform="rotate(-90 18 18)"/>
+                    </svg>
+                    <span class="absolute inset-0 flex items-center justify-center text-sm font-medium">
+                        {{ $item['percentage'] }}%
+                    </span>
+                </div>
+            </div>
+            @endforeach
+        </div>
                     </div>
                 </div>
             </section>
